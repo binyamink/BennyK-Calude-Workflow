@@ -28,12 +28,8 @@
       "Bash(latexmk *)",
       "Bash(bibtex *)",
       "Bash(pdfinfo *)",
-      "Bash(pdf2svg *)",
-      "Bash(quarto render *)",
       "Bash(Rscript *)",
       "Bash(python3 *)",
-      "Bash(./scripts/sync_to_docs.sh *)",
-      "Bash(./scripts/sync_to_docs.sh)",
       "Bash(chmod *)",
       "Bash(open *)",
       "Bash(xdg-open *)",
@@ -43,7 +39,11 @@
       "Bash(for *)",
       "Bash(gs *)",
       "Bash(pdftk *)",
-      "Bash(mkdir *)"
+      "Bash(mkdir *)",
+      "Bash(julia *)",
+      "Bash(powershell *)",
+      "Bash(pdflatex *)",
+      "Bash(python *)"
     ]
   },
   "hooks": {

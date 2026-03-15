@@ -57,10 +57,6 @@ Instead of one general-purpose reviewer, 10 focused agents each check one dimens
 
 Each is better at its narrow task than a generalist would be. The `/slide-excellence` skill runs them all in parallel. The same pattern extends to any academic artifact — manuscripts, data pipelines, proposals.
 
-### Adversarial QA
-
-Two agents work in opposition: the **critic** reads both Beamer and Quarto and produces harsh findings. The **fixer** implements exactly what the critic found. They loop until the critic says "APPROVED" (or 5 rounds max). This catches errors that single-pass review misses.
-
 ### Quality Gates
 
 Every file gets a score (0–100). Scores below threshold block the action:
@@ -76,7 +72,7 @@ Plans, specifications, and session logs survive auto-compression and session bou
 
 ## The Guide
 
-For a comprehensive walkthrough, read the **[full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html)** (or see the [source](guide/workflow-guide.qmd)).
+For a comprehensive walkthrough, read the **[full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html)** (or see `docs/workflow-guide.html` locally).
 
 It covers:
 1. **Why This Workflow Exists** — the problem and the vision
@@ -93,7 +89,7 @@ It covers:
 
 | Academic Task | How This Workflow Helps |
 |---------------|----------------------|
-| Lecture slides (Beamer/Quarto) | Full creation, translation, multi-agent review, deployment |
+| Lecture slides (Beamer) | Full creation, multi-agent review |
 | Research papers | Literature review, manuscript review, simulated peer review |
 | Data analysis | End-to-end R pipelines, replication verification, publication-ready output |
 | Replication packages | AEA-compliant packaging, reproducibility audit trails |
@@ -105,7 +101,7 @@ It covers:
 ## What's Included
 
 <details>
-<summary><strong>10 agents, 22 skills, 18 rules, 7 hooks</strong> (click to expand)</summary>
+<summary><strong>12 agents, 20 skills, 20+ rules, 7 hooks</strong> (click to expand)</summary>
 
 ### Agents (`.claude/agents/`)
 
@@ -115,10 +111,9 @@ It covers:
 | `slide-auditor` | Visual layout audit (overflow, font consistency, spacing) |
 | `pedagogy-reviewer` | 13-pattern pedagogical review (narrative arc, notation density, pacing) |
 | `r-reviewer` | R code quality, reproducibility, and domain correctness |
+| `julia-reviewer` | Julia code quality, type stability, and performance |
+| `stata-reviewer` | Stata do-file quality, estimation correctness, and output |
 | `tikz-reviewer` | Merciless TikZ diagram visual critique |
-| `beamer-translator` | Beamer-to-Quarto translation specialist |
-| `quarto-critic` | Adversarial QA comparing Quarto against Beamer benchmark |
-| `quarto-fixer` | Implements fixes from the critic agent |
 | `verifier` | End-to-end task completion verification |
 | `domain-reviewer` | **Template** for your field-specific substance reviewer |
 
@@ -127,15 +122,13 @@ It covers:
 | Skill | What It Does |
 |-------|-------------|
 | `/compile-latex` | 3-pass XeLaTeX compilation with bibtex |
-| `/deploy` | Render Quarto + sync to GitHub Pages |
-| `/extract-tikz` | TikZ diagrams to PDF to SVG pipeline |
 | `/proofread` | Launch proofreader on a file |
 | `/visual-audit` | Launch slide-auditor on a file |
 | `/pedagogy-review` | Launch pedagogy-reviewer on a file |
 | `/review-r` | Launch R code reviewer |
-| `/qa-quarto` | Adversarial critic-fixer loop (max 5 rounds) |
+| `/review-julia` | Launch Julia code reviewer |
+| `/review-stata` | Launch Stata do-file reviewer |
 | `/slide-excellence` | Combined multi-agent review |
-| `/translate-to-quarto` | Full 11-phase Beamer-to-Quarto translation |
 | `/validate-bib` | Cross-reference citations against bibliography |
 | `/devils-advocate` | Challenge design decisions before committing |
 | `/create-lecture` | Full lecture creation workflow |
@@ -144,7 +137,7 @@ It covers:
 | `/research-ideation` | Generate research questions and empirical strategies |
 | `/interview-me` | Interactive interview to formalize a research idea |
 | `/review-paper` | Manuscript review: structure, econometrics, referee objections |
-| `/data-analysis` | End-to-end R analysis with publication-ready output |
+| `/data-analysis` | End-to-end analysis (R/Julia/Stata) with publication-ready output |
 | `/learn` | Extract non-obvious discoveries into persistent skills |
 | `/context-status` | Show session health and context usage |
 | `/deep-audit` | Repository-wide consistency audit |
@@ -178,18 +171,21 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 
 | Rule | Triggers On | What It Enforces |
 |------|------------|-----------------|
-| `verification-protocol` | `.tex`, `.qmd`, `docs/` | Task completion checklist |
-| `single-source-of-truth` | `Figures/`, `.tex`, `.qmd` | No content duplication; Beamer is authoritative |
-| `quality-gates` | `.tex`, `.qmd`, `*.R` | 80/90/95 scoring + tolerance thresholds |
+| `verification-protocol` | `.tex`, `.jl`, `.do`, `.py` | Task completion checklist |
+| `single-source-of-truth` | `Figures/`, `.tex` | No content duplication; Beamer is authoritative |
+| `quality-gates` | `.tex`, `*.R`, `*.jl`, `*.do` | 80/90/95 scoring + tolerance thresholds |
 | `r-code-conventions` | `*.R` | R coding standards + math line-length exception |
+| `julia-code-conventions` | `*.jl` | Julia coding standards + type stability |
+| `stata-code-conventions` | `*.do` | Stata coding standards + estimation correctness |
+| `stata-execution` | `*.do` | Windows PowerShell execution protocol |
+| `data-management` | `data/`, `scripts/` | Data directory structure + provenance |
 | `tikz-visual-quality` | `.tex` | TikZ diagram visual standards |
-| `beamer-quarto-sync` | `.tex`, `.qmd` | Auto-sync Beamer edits to Quarto |
 | `pdf-processing` | `master_supporting_docs/` | Safe large PDF handling |
-| `proofreading-protocol` | `.tex`, `.qmd`, `quality_reports/` | Propose-first, then apply with approval |
+| `proofreading-protocol` | `.tex`, `quality_reports/` | Propose-first, then apply with approval |
 | `no-pause-beamer` | `.tex` | No overlay commands in Beamer |
-| `replication-protocol` | `*.R` | Replicate original results before extending |
-| `knowledge-base-template` | `.tex`, `.qmd`, `*.R` | Notation/application registry template |
-| `orchestrator-research` | `*.R`, `explorations/` | Simple orchestrator for research (no multi-round reviews) |
+| `replication-protocol` | `*.R`, `*.jl`, `*.do` | Replicate original results before extending |
+| `knowledge-base-template` | `.tex`, `*.R`, `*.jl`, `*.do` | Notation/application registry template |
+| `orchestrator-research` | `*.R`, `*.jl`, `*.do`, `explorations/` | Simple orchestrator for research |
 | `exploration-folder-protocol` | `explorations/` | Structured sandbox for experimental work |
 | `exploration-fast-track` | `explorations/` | Lightweight exploration workflow (60/100 threshold) |
 
@@ -215,9 +211,9 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 |------|-------------|---------|
 | [Claude Code](https://code.claude.com/docs/en/overview) | Everything | `npm install -g @anthropic-ai/claude-code` |
 | XeLaTeX | LaTeX compilation | [TeX Live](https://tug.org/texlive/) or [MacTeX](https://tug.org/mactex/) |
-| [Quarto](https://quarto.org) | Web slides | [quarto.org/docs/get-started](https://quarto.org/docs/get-started/) |
 | R | Figures & analysis | [r-project.org](https://www.r-project.org/) |
-| pdf2svg | TikZ to SVG | `brew install pdf2svg` (macOS) |
+| Julia | Quantitative modeling | [julialang.org](https://julialang.org/) |
+| Stata | Empirical analysis | [stata.com](https://www.stata.com/) |
 | [gh CLI](https://cli.github.com/) | PR workflow | `brew install gh` (macOS) |
 
 Not all tools are needed — install only what your project uses. Claude Code is the only hard requirement.
@@ -228,10 +224,8 @@ Not all tools are needed — install only what your project uses. Claude Code is
 
 1. **Fill in the knowledge base** (`.claude/rules/knowledge-base-template.md`) with your notation, applications, and design principles
 2. **Customize the domain reviewer** (`.claude/agents/domain-reviewer.md`) with review lenses specific to your field
-3. **Update the color palette** in your Quarto theme SCSS file — change the color variables at the top
-4. **Add field-specific R pitfalls** to `.claude/rules/r-code-conventions.md`
-5. **Fill in the lecture mapping** in `.claude/rules/beamer-quarto-sync.md`
-6. **Customize the workflow quick reference** (`.claude/WORKFLOW_QUICK_REF.md`) with your non-negotiables and preferences
+3. **Add field-specific code pitfalls** to `.claude/rules/r-code-conventions.md`, `julia-code-conventions.md`, `stata-code-conventions.md`
+4. **Customize the workflow quick reference** (`.claude/WORKFLOW_QUICK_REF.md`) with your non-negotiables and preferences
 7. **Set up the exploration folder** (`explorations/`) for experimental work
 
 ---
@@ -245,7 +239,7 @@ Not all tools are needed — install only what your project uses. Claude Code is
 
 ## Origin
 
-This infrastructure was extracted from **Econ 730: Causal Panel Data** at Emory University, developed by Pedro Sant'Anna using Claude Code over 6+ sessions. The course produced 6 complete PhD lecture decks with 800+ slides, interactive Quarto versions with plotly charts, and full R replication packages — all managed through this multi-agent workflow. The patterns are domain-agnostic: the same agents, rules, and orchestrator work for any academic project.
+This infrastructure was extracted from **Econ 730: Causal Panel Data** at Emory University, developed by Pedro Sant'Anna using Claude Code over 6+ sessions. The course produced 6 complete PhD lecture decks with 800+ slides and full replication packages — all managed through this multi-agent workflow. The patterns are domain-agnostic: the same agents, rules, and orchestrator work for any academic project.
 
 ---
 

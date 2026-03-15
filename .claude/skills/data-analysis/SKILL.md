@@ -7,9 +7,25 @@ allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 
 # Data Analysis Workflow
 
-Run an end-to-end data analysis in R: load, explore, analyze, and produce publication-ready output.
+Run an end-to-end data analysis: load, explore, analyze, and produce publication-ready output.
 
 **Input:** `$ARGUMENTS` — a dataset path (e.g., `data/county_panel.csv`) or a description of the analysis goal (e.g., "regress wages on education with state fixed effects using CPS data").
+
+## Language Selection
+
+Before starting, determine the analysis language:
+
+1. **If input is `.dta` file** → default to **Stata** (unless user specifies otherwise)
+2. **If task involves structural/spatial/quantitative modeling** → suggest **Julia**
+3. **If input is `.csv`/`.rds` or general empirical work** → default to **R**
+4. **If user specifies a language** → use that language
+5. **If ambiguous** → ask the user
+
+Then follow the language-specific conventions:
+- R: `.claude/rules/r-code-conventions.md`
+- Julia: `.claude/rules/julia-code-conventions.md`
+- Stata: `.claude/rules/stata-code-conventions.md` + `.claude/rules/stata-execution.md`
+- Python: `.claude/rules/python-code-conventions.md`
 
 ---
 
@@ -18,7 +34,7 @@ Run an end-to-end data analysis in R: load, explore, analyze, and produce public
 - **Follow R code conventions** in `.claude/rules/r-code-conventions.md`
 - **Save all scripts** to `scripts/R/` with descriptive names
 - **Save all outputs** (figures, tables, RDS) to `output/`
-- **Use `saveRDS()`** for every computed object — Quarto slides may need them
+- **Use `saveRDS()`** for every computed object — downstream scripts may need them
 - **Use project theme** for all figures (check for custom theme in `.claude/rules/`)
 - **Run r-reviewer** on the generated script before presenting results
 

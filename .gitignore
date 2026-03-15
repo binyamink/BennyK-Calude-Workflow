@@ -48,9 +48,41 @@ CLAUDE.local.md
 *.swo
 *~
 
-# Quarto rendering artifacts
-/.quarto/
 
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
+
+# Data files — large datasets should not be tracked
+# Small reference datasets can be force-added: git add -f data/raw/small_file.csv
+*.dta
+*.csv
+*.tsv
+*.parquet
+*.arrow
+*.feather
+*.fst
+*.h5
+*.hdf5
+*.sas7bdat
+*.sav
+*.por
+
+# Spatial data
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.geojson
+*.gpkg
+*.tif
+*.tiff
+
+# Stata artifacts
+*.smcl
+*.sthlp
+
+# Julia artifacts
+*.jld2
+Manifest.toml

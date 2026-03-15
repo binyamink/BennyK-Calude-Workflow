@@ -1,6 +1,8 @@
 ---
 paths:
   - "scripts/**/*.R"
+  - "scripts/**/*.jl"
+  - "scripts/**/*.do"
   - "Figures/**/*.R"
 ---
 
@@ -37,16 +39,17 @@ Before writing any R code:
 - [ ] Match original specification exactly (covariates, sample, clustering, SE computation)
 - [ ] Save all intermediate results as RDS
 
-### Stata to R Translation Pitfalls
+### Cross-Language Translation Reference
 
 <!-- Customize: Add pitfalls specific to your field -->
 
-| Stata | R | Trap |
-|-------|---|------|
-| `reg y x, cluster(id)` | `feols(y ~ x, cluster = ~id)` | Stata clusters df-adjust differently from some R packages |
-| `areg y x, absorb(id)` | `feols(y ~ x \| id)` | Check demeaning method matches |
-| `probit` for PS | `glm(family=binomial(link="probit"))` | R default logit != Stata default in some commands |
-| `bootstrap, reps(999)` | Depends on method | Match seed, reps, and bootstrap type exactly |
+| Stata | R | Julia | Trap |
+|-------|---|-------|------|
+| `reg y x, cluster(id)` | `feols(y ~ x, cluster = ~id)` | `reg(df, @formula(y ~ x), Vcov.cluster(:id))` | df-adjustment differs across implementations |
+| `areg y x, absorb(id)` | `feols(y ~ x \| id)` | `reg(df, @formula(y ~ x + fe(id)))` | Check demeaning method matches |
+| `probit` for PS | `glm(family=binomial(link="probit"))` | `glm(@formula(y ~ x), df, Binomial(), ProbitLink())` | Default link differs across languages |
+| `bootstrap, reps(999)` | Depends on method | `bootstrap(stat, data, n=999)` | Match seed, reps, and bootstrap type exactly |
+| `matrix` operations | Base R / Matrix pkg | Native `Array` / `LinearAlgebra` | Julia is column-major (like Fortran/R), unlike C/Python |
 
 ---
 

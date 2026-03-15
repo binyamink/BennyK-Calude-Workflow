@@ -1,8 +1,9 @@
 ---
 paths:
   - "Slides/**/*.tex"
-  - "Quarto/**/*.qmd"
   - "scripts/**/*.R"
+  - "**/*.jl"
+  - "**/*.do"
 ---
 
 # Course Knowledge Base: [YOUR COURSE NAME]
@@ -47,7 +48,21 @@ paths:
 |-------------|---------------|-----------|
 | | | |
 
-## R Code Pitfalls
+## Code Pitfalls
+
+### R
+
+| Bug | Impact | Fix |
+|-----|--------|-----|
+| | | |
+
+### Julia
+
+| Bug | Impact | Fix |
+|-----|--------|-----|
+| | | |
+
+### Stata
 
 | Bug | Impact | Fix |
 |-----|--------|-----|

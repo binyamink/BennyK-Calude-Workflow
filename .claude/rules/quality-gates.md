@@ -1,8 +1,9 @@
 ---
 paths:
   - "Slides/**/*.tex"
-  - "Quarto/**/*.qmd"
   - "scripts/**/*.R"
+  - "**/*.jl"
+  - "**/*.do"
 ---
 
 # Quality Gates & Scoring Rubrics
@@ -12,20 +13,6 @@ paths:
 - **80/100 = Commit** -- good enough to save
 - **90/100 = PR** -- ready for deployment
 - **95/100 = Excellence** -- aspirational
-
-## Quarto Slides (.qmd)
-
-| Severity | Issue | Deduction |
-|----------|-------|-----------|
-| Critical | Compilation failure | -100 |
-| Critical | Equation overflow | -20 |
-| Critical | Broken citation | -15 |
-| Critical | Typo in equation | -10 |
-| Major | Text overflow | -5 |
-| Major | TikZ label overlap | -5 |
-| Major | Notation inconsistency | -3 |
-| Minor | Font size reduction | -1 per slide |
-| Minor | Long lines (>100 chars) | -1 (EXCEPT documented math formulas) |
 
 ## R Scripts (.R)
 
@@ -44,6 +31,28 @@ paths:
 | Critical | XeLaTeX compilation failure | -100 |
 | Critical | Undefined citation | -15 |
 | Critical | Overfull hbox > 10pt | -10 |
+
+## Julia Scripts (.jl)
+
+| Severity | Issue | Deduction |
+|----------|-------|-----------|
+| Critical | Syntax errors | -100 |
+| Critical | Hardcoded absolute paths | -20 |
+| Critical | Type instability in hot loop | -20 |
+| Major | Missing Random.seed!() | -10 |
+| Major | Missing JLD2 serialization | -5 |
+| Minor | Style violation | -1 |
+
+## Stata Do-Files (.do)
+
+| Severity | Issue | Deduction |
+|----------|-------|-----------|
+| Critical | Execution error (r() in log) | -100 |
+| Critical | Hardcoded absolute paths | -20 |
+| Major | Missing log file | -15 |
+| Major | Missing set seed | -10 |
+| Major | Missing version statement | -5 |
+| Minor | Style violation | -1 |
 
 ## Enforcement
 

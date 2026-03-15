@@ -1,0 +1,54 @@
+# CLAUDE.local.md — Machine-Specific Configuration
+#
+# Copy this file to CLAUDE.local.md and fill in your local paths.
+# CLAUDE.local.md is gitignored — it stays on this machine only.
+
+## Stata Configuration
+
+# Path to Stata executable (uncomment and edit for your machine)
+# Windows — auto-detect order: StataNow19 → Stata18 → Stata17
+# stata_path: "C:/Program Files/Stata19/StataNow-MP.exe"
+# stata_path: "C:/Program Files/Stata18/StataMP-64.exe"
+# stata_path: "C:/Program Files/Stata17/StataMP-64.exe"
+
+# macOS
+# stata_path: "/usr/local/stata18/stata-mp"
+
+# Linux
+# stata_path: "/usr/local/stata18/stata-mp"
+
+## Julia Configuration
+
+# Julia is typically on PATH; only set if using a non-standard install
+# julia_path: "julia"
+
+## LaTeX Engine
+
+# pdflatex for papers (faster, wider compatibility)
+# xelatex for slides (Unicode, custom fonts)
+latex_engine_papers: pdflatex
+latex_engine_slides: xelatex
+
+## Python Configuration
+
+# python_path: "python3"
+
+---
+
+## Example: Benny's Laptop (Windows)
+
+```
+stata_path: "C:/Program Files/Stata19/StataNow-MP.exe"
+julia_path: "julia"
+latex_engine_papers: pdflatex
+latex_engine_slides: xelatex
+```
+
+## Example: Benny's Office Desktop (Windows)
+
+```
+stata_path: "C:/Program Files/Stata18/StataMP-64.exe"
+julia_path: "julia"
+latex_engine_papers: pdflatex
+latex_engine_slides: xelatex
+```
